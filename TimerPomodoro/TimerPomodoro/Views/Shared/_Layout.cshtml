@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - Timer Pomodoro</title>
+
+	<!-- CSS do Bootstrap 5.3.8 via CDN -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+		<div class="container">
+			<!-- Apontando a logo para o TimerController -->
+			@Html.ActionLink("Timer Pomodoro", "Index", "Timer", new { area = "" }, new { @class = "navbar-brand" })
+		</div>
+	</nav>
+
+	<div class="container body-content mt-4">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - Timer Pomodoro MVC</p>
+		</footer>
+	</div>
+
+	<!-- AngularJS 1.x via CDN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+	<!-- Seu módulo Angular -->
+	<script src="~/App/timerApp.js"></script>
+
+	@RenderSection("scripts", required: false)
+</body>
+</html>
