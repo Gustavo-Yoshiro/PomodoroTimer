@@ -1,0 +1,38 @@
+@{
+    ViewBag.Title = "Cronômetro";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <section id="CronometroComponente" class="card shadow-sm" ng-controller="CronometroController">
+            <div class="card-body text-center py-5">
+                <h1 id="CronometroTitulo" class="h3 mb-4">Cronômetro Pomodoro</h1>
+
+                <p id="TempoComponente" class="display-3 fw-semibold mb-4">{{ tempoFormatado }}</p>
+
+                <div id="BotoesComponente" class="d-flex flex-wrap justify-content-center gap-2">
+                    <button id="BotaoIniciarComponente"
+                            type="button"
+                            class="btn btn-success"
+                            ng-click="iniciarCronometro()"
+                            ng-disabled="cronometroEmExecucao">
+                        Iniciar
+                    </button>
+                    <button id="BotaoPausarComponente"
+                            type="button"
+                            class="btn btn-warning"
+                            ng-click="pausarCronometro()"
+                            ng-disabled="!cronometroEmExecucao">
+                        Pausar
+                    </button>
+                    <button id="BotaoResetarComponente"
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            ng-click="resetarCronometro()">
+                        Resetar
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
