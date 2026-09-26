@@ -1,0 +1,50 @@
+﻿body {
+	background-color: #121212;
+	color: #e0e0e0;
+}
+
+
+.tema-foco {
+	stroke: #8a2be2;
+	background-color: #8a2be2;
+	color: white;
+	border-color: #8a2be2;
+}
+
+.tema-pausa-curta {
+	stroke: #20c997;
+	background-color: #20c997;
+	color: #000;
+	border-color: #20c997;
+}
+
+.tema-pausa-longa {
+	stroke: #146c43;
+	background-color: #146c43;
+	color: white;
+	border-color: #146c43;
+}
+
+
+.botao-inativo {
+	background-color: transparent;
+	color: #aaa;
+	border: 1px solid #555;
+	transition: all 0.3s ease;
+}
+
+
+.circulo-fundo {
+	fill: none;
+	stroke: #333;
+	stroke-width: 12;
+}
+
+.circulo-progresso {
+	fill: none;
+	stroke-width: 12;
+	stroke-linecap: round;
+	transition: stroke-dashoffset 1s linear, stroke 0.5s ease;
+	transform: rotate(-90deg);
+	transform-origin: 50% 50%;
+}

@@ -1,38 +1,80 @@
 @{
-    ViewBag.Title = "Cronômetro";
+	ViewBag.Title = "Cronômetro";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-        <section id="CronometroComponente" class="card shadow-sm" ng-controller="CronometroController">
-            <div class="card-body text-center py-5">
-                <h1 id="CronometroTitulo" class="h3 mb-4">Cronômetro Pomodoro</h1>
+@try
+{
+	<div class="row justify-content-center">
+		<div class="col-md-8 col-lg-6">
+			<section id="CronometroComponente" class="card shadow-sm" ng-controller="CronometroController">
 
-                <p id="TempoComponente" class="display-3 fw-semibold mb-4">{{ tempoFormatado }}</p>
+				<div id="BotoesFasesComponente" class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+					<button id="BotaoFocoComponente"
+							type="button"
+							class="btn btn-success"
+							ng-click="alterarFase('Foco')"
+							ng-disabled="faseAtual === 'Foco'">
+						Pomodoro
+					</button>
+					<button id="BotaoPausaCurtaComponente"
+							type="button"
+							class="btn btn-warning"
+							ng-click="alterarFase('Pausa Curta')"
+							ng-disabled="faseAtual === 'Pausa Curta'">
+						Pausa Curta
+					</button>
+					<button id="BotaoPausaLongaComponente"
+							type="button"
+							class="btn btn-warning"
+							ng-click="alterarFase('Pausa Longa')"
+							ng-disabled="faseAtual === 'Pausa Longa'">
+						Pausa Longa
+					</button>
+				</div>
 
-                <div id="BotoesComponente" class="d-flex flex-wrap justify-content-center gap-2">
-                    <button id="BotaoIniciarComponente"
-                            type="button"
-                            class="btn btn-success"
-                            ng-click="iniciarCronometro()"
-                            ng-disabled="cronometroEmExecucao">
-                        Iniciar
-                    </button>
-                    <button id="BotaoPausarComponente"
-                            type="button"
-                            class="btn btn-warning"
-                            ng-click="pausarCronometro()"
-                            ng-disabled="!cronometroEmExecucao">
-                        Pausar
-                    </button>
-                    <button id="BotaoResetarComponente"
-                            type="button"
-                            class="btn btn-outline-secondary"
-                            ng-click="resetarCronometro()">
-                        Resetar
-                    </button>
-                </div>
-            </div>
-        </section>
-    </div>
-</div>
+				<div class="card-body text-center py-5">
+					<h1 id="CronometroTitulo" class="h3 mb-4">Pomodoro Timer</h1>
+
+					<div id="VisorRelogioComponente" class="position-relative d-inline-block my-4">
+						<svg id="IndicadorProgressoComponente" width="250" height="250">
+							<circle cx="125" cy="125" r="110" class="circulo-fundo"></circle>
+
+							<circle cx="125" cy="125" r="110"
+									class="circulo-progresso"
+									ng-class="obterClasseTema()"
+									ng-style="{'stroke-dasharray': perimetroCirculo, 'stroke-dashoffset': deslocamentoCirculo}">
+							</circle>
+						</svg>
+
+						<p id="TempoComponente" class="position-absolute top-50 start-50 translate-middle display-3 fw-semibold m-0">
+							{{ tempoFormatado }}
+						</p>
+					</div> 
+					<div id="BotoesControleComponente" class="d-flex flex-wrap justify-content-center gap-2">
+						<button id="BotaoAlternarComponente"
+								type="button"
+								class="btn btn-primary"
+								ng-click="alternarCronometro()">
+							<span ng-if="!cronometroEmExecucao">&#9658;</span> 
+							<span ng-if="cronometroEmExecucao">&#10073;&#10073;</span>
+						</button>
+						<button id="BotaoResetarComponente"
+								type="button"
+								class="btn btn-outline-secondary"
+								ng-click="resetarCronometro()">
+							Resetar
+						</button>
+					</div>
+
+				</div>
+			</section>
+		</div>
+	</div>
+
+}
+catch (Exception ex)
+{
+	<div class="alert alert-danger" id="ErroTelaComponente">
+		Ocorreu um erro ao montar o cronômetro: @ex.Message
+	</div>
+}
