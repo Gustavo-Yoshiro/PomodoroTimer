@@ -8,6 +8,15 @@
 		<div class="col-md-8 col-lg-6">
 			<section id="CronometroComponente" class="card shadow-sm" ng-controller="CronometroController">
 
+				<button id="BotaoAbrirTarefasComponente"
+						class="btn btn-dark rounded-4 px-3 py-2 border-secondary mb-3"
+						type="button"
+						data-bs-toggle="offcanvas"
+						data-bs-target="#JanelaTarefasComponente"
+						aria-controls="JanelaTarefasComponente">
+					<i class="fa-solid fa-list-check"></i> Abrir Tarefas
+				</button>
+
 				<div id="BotoesFasesComponente" class="d-flex flex-wrap justify-content-center gap-2 mt-3">
 					<button id="BotaoFocoComponente"
 							type="button"
@@ -49,13 +58,13 @@
 						<p id="TempoComponente" class="position-absolute top-50 start-50 translate-middle display-3 fw-semibold m-0">
 							{{ tempoFormatado }}
 						</p>
-					</div> 
+					</div>
 					<div id="BotoesControleComponente" class="d-flex flex-wrap justify-content-center gap-2">
 						<button id="BotaoAlternarComponente"
 								type="button"
 								class="btn btn-primary"
 								ng-click="alternarCronometro()">
-							<span ng-if="!cronometroEmExecucao">&#9658;</span> 
+							<span ng-if="!cronometroEmExecucao">&#9658;</span>
 							<span ng-if="cronometroEmExecucao">&#10073;&#10073;</span>
 						</button>
 						<button id="BotaoResetarComponente"
@@ -67,6 +76,26 @@
 					</div>
 
 				</div>
+
+
+				<div class="offcanvas offcanvas-end text-light shadow-lg"
+					 tabindex="-1"
+					 id="JanelaTarefasComponente"
+					 aria-labelledby="JanelaTarefasTitulo"
+					 style="width: 450px; background-color: #1a1a1b; border-right: 1px solid #333;">
+
+					<div class="offcanvas-header border-bottom border-secondary pt-4 pb-3 px-4">
+						<h5 class="offcanvas-title fw-bold d-flex align-items-center" id="JanelaTarefasTitulo">
+							<i class="fa-solid fa-chevron-right me-3 fs-6 text-secondary"></i> Tarefas
+						</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+					</div>
+
+					<div class="offcanvas-body p-0">
+						@Html.Action("Index", "Tarefas")
+					</div>
+				</div>
+
 			</section>
 		</div>
 	</div>
@@ -78,3 +107,4 @@ catch (Exception ex)
 		Ocorreu um erro ao montar o cronômetro: @ex.Message
 	</div>
 }
+

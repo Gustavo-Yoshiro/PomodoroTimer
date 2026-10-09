@@ -11,6 +11,12 @@ namespace TimerPomodoro.Controllers
 {
 	public class TarefasController : Controller
 	{
+
+		public ActionResult Index()
+		{	
+			return PartialView();
+		}
+
 		[HttpPost]
 		public ActionResult SalvarTarefa(Tarefa tarefa)
 		{
@@ -31,7 +37,7 @@ namespace TimerPomodoro.Controllers
 			}
 		}
 
-		[HttpPost]
+		[HttpGet]
 		public ActionResult BuscarTarefa(int id)
 		{
 			try
@@ -91,6 +97,26 @@ namespace TimerPomodoro.Controllers
 				return Json(new { sucesso = false, mensagem = "Falha ao remover tarefa no banco." });
 			}
 		}
+
+		[HttpGet]
+		public ActionResult ListarTarefas()
+		{
+			try
+			{
+				using (var db = new PomodoroContext())
+				{
+					var tarefas = db.Tarefas.ToList();
+
+					return Json(new { sucesso = true, dados = tarefas }, JsonRequestBehavior.AllowGet);
+				}
+			}
+			catch (Exception)
+			{
+				Response.StatusCode = 500;
+				return Json(new { sucesso = false, mensagem = "Falha ao listar tarefas." }, JsonRequestBehavior.AllowGet);
+			}
+		}
+
 
 	}
 }

@@ -1,0 +1,74 @@
+@try
+{
+	<div class="row justify-content-center mt-4" ng-controller="TarefasController">
+
+		<div class="col-md-10 col-lg-8">
+			<section id="TarefasComponente" class="card shadow bg-dark text-light" style="border-radius: 20px; min-height: 600px;">
+
+				<div class="card-header border-0 bg-transparent d-flex justify-content-between align-items-center pt-4 pb-3 px-4">
+					<h2 id="TarefasTitulo" class="h4 mb-0 fw-bold d-flex align-items-center">
+						<i class="fa-solid fa-chevron-right me-3 fs-6 text-secondary"></i> Tarefas
+					</h2>
+					<div id="AcoesListaComponente" class="d-flex gap-2">
+						<button id="BotaoPesquisarComponente" class="btn btn-outline-secondary rounded-circle" style="width: 40px; height: 40px;"><i class="fa-solid fa-magnifying-glass"></i> lupa</button>
+						<button id="BotaoFiltrarComponente" class="btn btn-outline-secondary rounded-circle" style="width: 40px; height: 40px;"><i class="fa-solid fa-sliders"></i> filtro</button>
+					</div>
+				</div>
+
+				<div class="card-body px-4">
+
+					<button id="BotaoAdicionarTarefaComponente"
+							class="btn btn-outline-secondary w-100 text-start p-3 mb-4 text-light"
+							style="border-style: dashed; border-width: 2px; border-radius: 12px; background-color: rgba(255,255,255,0.02);"
+							ng-click="abrirModalNovaTarefa()">
+						<span class="text-secondary fw-bold me-2">+</span> Adicionar tarefa
+					</button>
+
+					<div id="ListaVaziaComponente"
+						 class="d-flex flex-column align-items-center justify-content-center text-center text-secondary mt-5 pt-5"
+						 ng-show="tarefas.length === 0">
+						<i class="fa-solid fa-clipboard-list fa-3x mb-3 opacity-50"></i>
+						<p id="MensagemVaziaComponente" class="mb-0 fw-semibold" style="max-width: 300px;">
+							Ainda não há tarefas — adicione uma acima para manter o foco.
+						</p>
+					</div>
+
+					<div id="ListaItensComponente" ng-show="tarefas.length > 0">
+						<div class="d-flex align-items-center justify-content-between p-3 mb-2 rounded-3"
+							 style="background-color: rgba(255,255,255,0.05);"
+							 ng-repeat="tarefa in tarefas">
+
+							<div class="d-flex align-items-center gap-3">
+								<button id="BotaoConcluirComponente_{{tarefa.Id}}"
+										class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center"
+										style="width: 24px; height: 24px;"
+										ng-click="atualizarTarefa(tarefa)"
+										ng-class="{'bg-success text-white border-success': !tarefa.Ativa}">
+									<i class="fa-solid fa-check" style="font-size: 10px;" ng-show="!tarefa.Ativa"></i>
+								</button>
+
+								<span id="NomeTarefaComponente_{{tarefa.Id}}"
+									  ng-class="{'text-decoration-line-through text-secondary': !tarefa.Ativa}"
+									  class="fw-semibold text-light">
+									{{tarefa.Nome}}
+								</span>
+							</div>
+
+							<button id="BotaoRemoverComponente_{{tarefa.Id}}"
+									class="btn btn-link text-secondary p-0"
+									ng-click="removerTarefa(tarefa)">
+								<i class="fa-solid fa-trash"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+}
+catch (Exception ex)
+{
+	<div class="alert alert-danger" id="ErroTelaComponente">
+		Ocorreu um erro ao carregar a tela de tarefas: @ex.Message
+	</div>
+}

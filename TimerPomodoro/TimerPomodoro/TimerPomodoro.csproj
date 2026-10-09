@@ -128,6 +128,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\FasesController.cs" />
+    <Compile Include="Controllers\TarefasController.cs" />
     <Compile Include="Controllers\TimerController.cs" />
     <Compile Include="Data\PomodoroContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -162,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Views\Tarefas\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

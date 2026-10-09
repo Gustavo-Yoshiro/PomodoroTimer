@@ -1,4 +1,7 @@
-angular.module("timerApp", []).controller("CronometroController", [
+var app = angular.module("timerApp",[])
+
+
+app.controller("CronometroController", [
     "$scope",
     "$interval",
     "$http",
@@ -157,5 +160,84 @@ angular.module("timerApp", []).controller("CronometroController", [
         };
 
         atualizarTempoExibido();
+    }
+]);
+
+
+
+
+
+
+
+
+app.controller("TarefasController", [
+    "$scope",
+    "$http",
+    function ($scope, $http) {
+        $scope.tarefas = [];
+
+        $scope.listarTarefas = function () {
+            $http.get('/Tarefas/ListarTarefas')
+                .then(function (resposta) {
+                    if (resposta.data.sucesso) {
+                        $scope.tarefas = resposta.data.dados;
+                    }
+                })
+                .catch(function (erro) {
+                    console.error("Falha ao listar tarefas.", erro);
+                });
+        };
+
+        $scope.abrirModalNovaTarefa = function () {
+            var nomeDaTarefa = prompt("Digite o nome da sua nova tarefa:");
+
+            if (!nomeDaTarefa) return;
+
+            var novaTarefa = { Nome: nomeDaTarefa, Ativa: true };
+            $scope.salvarTarefa(novaTarefa);
+        };
+
+        $scope.salvarTarefa = function (tarefa) {
+            $http.post('/Tarefas/SalvarTarefa', tarefa)
+                .then(function (resposta) {
+                    if (resposta.data.sucesso) {
+                        $scope.listarTarefas();
+                    }
+                })
+                .catch(function (erro) {
+                    console.error("Falha ao salvar tarefa.", erro);
+                });
+        };
+
+        $scope.atualizarTarefa = function (tarefa) {
+            tarefa.Ativa = !tarefa.Ativa;
+
+            $http.post('/Tarefas/AtualizarTarefa', tarefa)
+                .then(function (resposta) {
+                    if (resposta.data.sucesso) return;
+
+                    tarefa.Ativa = !tarefa.Ativa;
+                })
+                .catch(function (erro) {
+                    tarefa.Ativa = !tarefa.Ativa;
+                    console.error("Falha ao atualizar tarefa.", erro);
+                });
+        };
+
+        $scope.removerTarefa = function (tarefa) {
+            if (!confirm("Deseja realmente remover esta tarefa?")) return;
+
+            $http.post('/Tarefas/RemoverTarefa', tarefa)
+                .then(function (resposta) {
+                    if (resposta.data.sucesso) {
+                        $scope.listarTarefas();
+                    }
+                })
+                .catch(function (erro) {
+                    console.error("Falha ao remover tarefa.", erro);
+                });
+        };
+
+        $scope.listarTarefas();
     }
 ]);
