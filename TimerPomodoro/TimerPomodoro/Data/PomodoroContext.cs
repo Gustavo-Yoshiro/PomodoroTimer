@@ -9,6 +9,6 @@ namespace TimerPomodoro.Data
 
 		public DbSet<Tarefa> Tarefas { get; set; }
 		public DbSet<Fase> Fases { get; set; }
-		public DbSet<ConfiguracaoPomodoro> Configuracoes { get; set; }
+		public DbSet<ConfiguracaoDoCiclo> Configuracoes { get; set; }
 	}
 }

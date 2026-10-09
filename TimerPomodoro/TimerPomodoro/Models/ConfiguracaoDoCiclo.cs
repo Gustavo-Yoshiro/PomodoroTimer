@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace TimerPomodoro.Models
 {
-	public class ConfiguracaoPomodoro
+	[Table("ConfiguracaoDoCiclo")]
+	public class ConfiguracaoDoCiclo
 	{
-	public int IdConfiguracao { get; set; }
+	public int Id { get; set; }
 
 	public int TempoFoco { get; set; }
 

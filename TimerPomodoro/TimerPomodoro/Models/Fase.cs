@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerPomodoro.Models
 {
+	[Table("Fases")]
 	public class Fase
 	{
-		public int IdFase { get; set; }
+		public int Id { get; set; }
+
+		public int? IdTarefa { get; set; }
 
 		public string Tipo { get; set; }
 
@@ -17,9 +21,6 @@ namespace TimerPomodoro.Models
 
 		public DateTime DataRegistro { get; set; }
 
-		public int? IdTarefa { get; set; }
-
-		public virtual Tarefa Tarefa { get; set; }
 
 	}
 }

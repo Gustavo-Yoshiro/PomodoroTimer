@@ -1,18 +1,18 @@
 angular.module("timerApp", []).controller("CronometroController", [
     "$scope",
     "$interval",
-    function ($scope, $interval) {
+    "$http",
+    function ($scope, $interval, $http) {
         const TemposPorFase = {
-            'Foco': 25 * 60,
-            'Pausa Curta': 5 * 60,
-            'Pausa Longa': 15 * 60
+            'Foco': 3 * 1,
+            'Pausa Curta': 5 * 1,
+            'Pausa Longa': 7 * 1
         };
         var intervaloContagem = null;
         var momentoTerminoFase;
 
         $scope.segundosRestantes = TemposPorFase['Foco'];
         $scope.cronometroEmExecucao = false;
-        $scope.tempoFormatado = "25:00";
         $scope.faseAtual = 'Foco';
         $scope.numeroCiclos = 1;
         $scope.perimetroCirculo = 691;
@@ -36,20 +36,6 @@ angular.module("timerApp", []).controller("CronometroController", [
                 intervaloContagem = null;
             }
             $scope.cronometroEmExecucao = false;
-        }
-
-        function atualizarProgressoCronometro() {
-            var milissegundosRestantes = momentoTerminoFase - Date.now();
-            if (milissegundosRestantes <= 0) {
-                pararIntervaloContagem();
-                $scope.segundosRestantes = 0;
-                avancarFase();
-                atualizarTempoExibido();
-                return;
-            }
-            $scope.segundosRestantes = Math.ceil(milissegundosRestantes / 1000) ;
-            atualizarTempoExibido();
-
         }
 
         function avancarFase() {
@@ -91,6 +77,7 @@ angular.module("timerApp", []).controller("CronometroController", [
 
             if (milissegundosRestantes <= 0) {
                 pararIntervaloContagem();
+                salvarFase();
                 $scope.segundosRestantes = 0;
                 $scope.deslocamentoCirculo = 0;
                 avancarFase();
@@ -105,6 +92,28 @@ angular.module("timerApp", []).controller("CronometroController", [
             $scope.deslocamentoCirculo = $scope.perimetroCirculo - ($scope.perimetroCirculo * fracaoDoTempo);
 
             atualizarTempoExibido();
+        }
+
+        function salvarFase() {
+            var dadosDaFase = {
+                IdTarefa: null,
+                Tipo: $scope.faseAtual, 
+                Status: "Concluida",
+                DuracaoReal: TemposPorFase[$scope.faseAtual] 
+            };
+            $http.post('/Fases/SalvarFase', dadosDaFase)
+                .then(function (response) {
+                    if (response.data.sucesso) {
+                        console.log("Sessão salva com sucesso!");
+                    } else {
+                        console.error(response.data.mensagem);
+                    }
+                })
+                .catch(function (error) {
+                    alert("Erro ao salvar sessão. A contagem continua normalmente.");
+                    console.error("Erro na requisição:", error);
+                });
+
         }
 
         $scope.obterClasseTema = function obterClasseTema() {

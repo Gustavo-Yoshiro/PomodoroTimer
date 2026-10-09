@@ -127,13 +127,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\FasesController.cs" />
     <Compile Include="Controllers\TimerController.cs" />
     <Compile Include="Data\PomodoroContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Fase.cs" />
-    <Compile Include="Models\ConfiguracaoPomodoro.cs" />
+    <Compile Include="Models\ConfiguracaoDoCiclo.cs" />
     <Compile Include="Models\Tarefa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
