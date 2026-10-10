@@ -16,6 +16,14 @@
 						aria-controls="JanelaTarefasComponente">
 					<i class="fa-solid fa-list-check"></i> Abrir Tarefas
 				</button>
+				<button id="BotaoAbrirConfiguracoesComponente"
+						class="btn btn-dark rounded-4 px-3 py-2 border-secondary"
+						type="button"
+						data-bs-toggle="offcanvas"
+						data-bs-target="#JanelaConfiguracoesComponente"
+						aria-controls="JanelaConfiguracoesComponente">
+					<i class="fa-solid fa-gear"></i> Configuracoes
+				</button>
 
 				<div id="BotoesFasesComponente" class="d-flex flex-wrap justify-content-center gap-2 mt-3">
 					<button id="BotaoFocoComponente"
@@ -106,6 +114,18 @@
 
 					<div class="offcanvas-body p-0">
 						@Html.Action("Index", "Tarefas")
+					</div>
+				</div>
+
+				<div class="offcanvas offcanvas-end text-light shadow-lg" tabindex="-1" id="JanelaConfiguracoesComponente" aria-labelledby="JanelaConfiguracoesTitulo" style="width: 400px; background-color: #1a1a1b; border-left: 1px solid #333;">
+					<div class="offcanvas-header border-bottom border-secondary pt-4 pb-3 px-4">
+						<h5 class="offcanvas-title fw-bold d-flex align-items-center" id="JanelaConfiguracoesTitulo">
+							<i class="fa-solid fa-gear me-3 fs-6 text-secondary"></i> Configuracoes
+						</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+					</div>
+					<div class="offcanvas-body p-0">
+						@Html.Action("Index", "Configuracoes")
 					</div>
 				</div>
 

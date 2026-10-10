@@ -127,6 +127,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ConfiguracoesController.cs" />
     <Compile Include="Controllers\FasesController.cs" />
     <Compile Include="Controllers\TarefasController.cs" />
     <Compile Include="Controllers\TimerController.cs" />
@@ -164,6 +165,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\Tarefas\Index.cshtml" />
+    <Content Include="Views\Configuracoes\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

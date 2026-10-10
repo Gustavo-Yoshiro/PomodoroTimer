@@ -7,15 +7,40 @@ app.controller("CronometroController", [
     "$http",
     "$rootScope",
     function ($scope, $interval, $http, $rootScope) {
-        const TemposPorFase = {
-            'Foco': 3 * 1,
-            'Pausa Curta': 5 * 1,
-            'Pausa Longa': 7 * 1
-        };
         var intervaloContagem = null;
         var momentoTerminoFase;
 
-        $scope.segundosRestantes = TemposPorFase['Foco'];
+        $scope.configuracoesDoCiclo = {
+            tempoFoco: 25,
+            tempoPausaCurta: 5,
+            tempoPausaLonga: 15,
+            ciclosAtePausaLonga: 4
+        };
+
+        $rootScope.$on('configuracoesCarregadas', aplicarNovasConfiguracoes);
+        $rootScope.$on('configuracoesAtualizadas', aplicarNovasConfiguracoes);
+
+        function aplicarNovasConfiguracoes(evento, dados) {
+            $scope.configuracoesDoCiclo = {
+                tempoFoco: dados.TempoFoco,
+                tempoPausaCurta: dados.TempoPausaCurta,
+                tempoPausaLonga: dados.TempoPausaLonga,
+                ciclosAtePausaLonga: dados.CiclosAtePausaLonga
+            };
+
+            if (!$scope.cronometroEmExecucao) {
+                $scope.resetarCronometro();
+            }
+        }
+
+        function obterTempoDaFaseAtual() {
+            if ($scope.faseAtual === 'Foco') return $scope.configuracoesDoCiclo.tempoFoco * 60;
+            if ($scope.faseAtual === 'Pausa Curta') return $scope.configuracoesDoCiclo.tempoPausaCurta * 60;
+            if ($scope.faseAtual === 'Pausa Longa') return $scope.configuracoesDoCiclo.tempoPausaLonga * 60;
+            return 0;
+        }
+
+        $scope.segundosRestantes = obterTempoDaFaseAtual();
         $scope.cronometroEmExecucao = false;
         $scope.faseAtual = 'Foco';
         $scope.numeroCiclos = 1;
@@ -45,12 +70,13 @@ app.controller("CronometroController", [
         function avancarFase() {
             if ($scope.faseAtual === 'Foco') {
                 $scope.numeroCiclos++;
-                if (($scope.numeroCiclos % 4) === 0) {
+
+                if (($scope.numeroCiclos % $scope.configuracoesDoCiclo.ciclosAtePausaLonga) === 0) {
                     $scope.alterarFase('Pausa Longa');
-                    return; 
+                    return;
                 }
                 $scope.alterarFase('Pausa Curta');
-                return; 
+                return;
             }
             $scope.alterarFase('Foco');
         }
@@ -61,15 +87,13 @@ app.controller("CronometroController", [
             }
 
             if ($scope.segundosRestantes <= 0) {
-                $scope.segundosRestantes = TemposPorFase['Foco'];
+                $scope.segundosRestantes = obterTempoDaFaseAtual();
                 atualizarTempoExibido();
             }
             $scope.cronometroEmExecucao = true;
             calcularTerminoDaFase();
             intervaloContagem = $interval(atualizarProgressoCronometro, 1000);
-            
-
-        };
+        }
 
         function calcularTerminoDaFase() {
             var tempoRestanteEmMilissegundos = $scope.segundosRestantes * 1000;
@@ -91,8 +115,9 @@ app.controller("CronometroController", [
 
             $scope.segundosRestantes = Math.ceil(milissegundosRestantes / 1000);
 
-            var segundosTotaisDaFase = TemposPorFase[$scope.faseAtual];
+            var segundosTotaisDaFase = obterTempoDaFaseAtual();
             var fracaoDoTempo = $scope.segundosRestantes / segundosTotaisDaFase;
+
             $scope.deslocamentoCirculo = $scope.perimetroCirculo - ($scope.perimetroCirculo * fracaoDoTempo);
 
             atualizarTempoExibido();
@@ -101,38 +126,34 @@ app.controller("CronometroController", [
         function salvarFase() {
             var dadosDaFase = {
                 IdTarefa: $rootScope.tarefaEmFoco ? $rootScope.tarefaEmFoco.Id : null,
-                Tipo: $scope.faseAtual, 
+                Tipo: $scope.faseAtual,
                 Status: "Concluida",
-                DuracaoReal: TemposPorFase[$scope.faseAtual] 
+                DuracaoReal: obterTempoDaFaseAtual()
             };
+
             $http.post('/Fases/SalvarFase', dadosDaFase)
                 .then(function (response) {
                     if (response.data.sucesso) {
                         console.log("Sessão salva com sucesso!");
-                    } else {
-                        console.error(response.data.mensagem);
+                        return;
                     }
+                    console.error(response.data.mensagem);
                 })
                 .catch(function (error) {
                     alert("Erro ao salvar sessão. A contagem continua normalmente.");
                     console.error("Erro na requisição:", error);
                 });
-
         }
 
         $scope.obterClasseTema = function obterClasseTema() {
-            if ($scope.faseAtual === 'Foco') {
-                return 'tema-foco';
-            }
-
-            if ($scope.faseAtual === 'Pausa Curta') {
-                return 'tema-pausa-curta';
-            }
+            if ($scope.faseAtual === 'Foco') return 'tema-foco';
+            if ($scope.faseAtual === 'Pausa Curta') return 'tema-pausa-curta';
             return 'tema-pausa-longa';
         };
+
         $scope.resetarCronometro = function resetarCronometro() {
             pararIntervaloContagem();
-            $scope.segundosRestantes = TemposPorFase[$scope.faseAtual];
+            $scope.segundosRestantes = obterTempoDaFaseAtual();
             atualizarTempoExibido();
             $scope.deslocamentoCirculo = 0;
         };
@@ -155,11 +176,10 @@ app.controller("CronometroController", [
         $scope.alterarFase = function alterarFase(novaFase) {
             pararIntervaloContagem();
             $scope.faseAtual = novaFase;
-            $scope.segundosRestantes = TemposPorFase[novaFase];
+            $scope.segundosRestantes = obterTempoDaFaseAtual();
             atualizarTempoExibido();
             $scope.deslocamentoCirculo = 0;
         };
-
 
         $scope.removerFocoTarefa = function () {
             $rootScope.tarefaEmFoco = null;
@@ -261,5 +281,47 @@ app.controller("TarefasController", [
         };
 
         $scope.listarTarefas();
+    }
+]);
+
+
+app.controller("ConfiguracoesController", [
+    "$scope",
+    "$http",
+    "$rootScope", 
+    function ($scope, $http, $rootScope) {
+        $scope.config = {};
+
+        $scope.buscarConfiguracao = function () {
+            $http.get('/Configuracoes/BuscarConfiguracao')
+                .then(function (resposta) {
+                    if (resposta.data.sucesso) {
+                        $scope.config = resposta.data.dados;
+                        $rootScope.$broadcast('configuracoesCarregadas', $scope.config);
+                    }
+                })
+                .catch(function (erro) {
+                    console.error("Falha ao buscar configurações.", erro);
+                });
+        };
+
+        $scope.salvarConfiguracao = function () {
+            $http.post('/Configuracoes/SalvarConfiguracao', $scope.config)
+                .then(function (resposta) {
+                    if (resposta.data.sucesso) {
+                        alert("Configurações salvas com sucesso!");
+                        $rootScope.$broadcast('configuracoesAtualizadas', $scope.config);
+
+                        var painel = document.getElementById('JanelaConfiguracoesComponente');
+                        var instancia = bootstrap.Offcanvas.getInstance(painel);
+                        if (instancia) instancia.hide();
+                    }
+                })
+                .catch(function (erro) {
+                    alert(erro.data.mensagem || "Falha ao salvar configurações.");
+                });
+        };
+
+        $scope.buscarConfiguracao();
     }
 ]);

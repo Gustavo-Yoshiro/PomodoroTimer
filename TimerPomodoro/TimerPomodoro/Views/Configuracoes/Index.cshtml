@@ -1,0 +1,40 @@
+@{
+	Layout = null; 
+}
+
+@try
+{
+	<div class="px-4 py-3" ng-controller="ConfiguracoesController">
+
+		<div class="mb-4">
+			<label id="TempoFocoTitulo" class="form-label text-secondary fw-bold">Tempo de Foco (minutos)</label>
+			<input type="number" id="TempoFocoComponente" class="form-control bg-dark text-light border-secondary" ng-model="config.TempoFoco" min="1" max="120">
+		</div>
+
+		<div class="mb-4">
+			<label id="PausaCurtaTitulo" class="form-label text-secondary fw-bold">Pausa Curta (minutos)</label>
+			<input type="number" id="PausaCurtaComponente" class="form-control bg-dark text-light border-secondary" ng-model="config.TempoPausaCurta" min="1" max="30">
+		</div>
+
+		<div class="mb-4">
+			<label id="PausaLongaTitulo" class="form-label text-secondary fw-bold">Pausa Longa (minutos)</label>
+			<input type="number" id="PausaLongaComponente" class="form-control bg-dark text-light border-secondary" ng-model="config.TempoPausaLonga" min="1" max="60">
+		</div>
+
+		<div class="mb-5">
+			<label id="CiclosTitulo" class="form-label text-secondary fw-bold">Ciclos ate Pausa Longa</label>
+			<input type="number" id="CiclosComponente" class="form-control bg-dark text-light border-secondary" ng-model="config.CiclosAtePausaLonga" min="1" max="10">
+		</div>
+
+		<button id="BotaoSalvarConfiguracoesComponente" class="btn btn-success w-100 py-3 rounded-3 fw-bold" ng-click="salvarConfiguracao()">
+			<i class="fa-solid fa-save me-2"></i> Salvar Configuracoes
+		</button>
+
+	</div>
+}
+catch (Exception ex)
+{
+	<div class="alert alert-danger" id="ErroTelaConfiguracaoComponente">
+		Ocorreu um erro ao carregar as configurações: @ex.Message
+	</div>
+}
