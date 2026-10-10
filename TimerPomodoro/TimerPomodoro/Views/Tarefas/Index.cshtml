@@ -20,9 +20,18 @@
 					<button id="BotaoAdicionarTarefaComponente"
 							class="btn btn-outline-secondary w-100 text-start p-3 mb-4 text-light"
 							style="border-style: dashed; border-width: 2px; border-radius: 12px; background-color: rgba(255,255,255,0.02);"
-							ng-click="abrirModalNovaTarefa()">
+							ng-click="abrirFormularioNovaTarefa()"
+							ng-show="!exibirFormularioNovaTarefa">
 						<span class="text-secondary fw-bold me-2">+</span> Adicionar tarefa
 					</button>
+
+					<div id="FormularioNovaTarefaComponente" class="card bg-dark border-secondary mb-4 p-3" ng-show="exibirFormularioNovaTarefa">
+						<input type="text" id="NomeNovaTarefaComponente" class="form-control bg-dark text-light border-secondary mb-3" placeholder="O que você vai fazer?" ng-model="novaTarefa.Nome" />
+						<div class="d-flex justify-content-end gap-2">
+							<button id="BotaoCancelarNovaTarefaComponente" class="btn btn-outline-secondary" ng-click="cancelarNovaTarefa()">Cancelar</button>
+							<button id="BotaoSalvarNovaTarefaComponente" class="btn btn-success" ng-click="confirmarNovaTarefa()">Salvar</button>
+						</div>
+					</div>
 
 					<div id="ListaVaziaComponente"
 						 class="d-flex flex-column align-items-center justify-content-center text-center text-secondary mt-5 pt-5"
@@ -51,6 +60,12 @@
 									  ng-class="{'text-decoration-line-through text-secondary': !tarefa.Ativa}"
 									  class="fw-semibold text-light">
 									{{tarefa.Nome}}
+									<button id="BotaoFocarTarefaComponente_{{tarefa.Id}}"
+											class="btn btn-sm btn-primary ms-auto me-2"
+											ng-click="selecionarTarefaParaFoco(tarefa)"
+											ng-show="tarefa.Ativa">
+										<i class="fa-solid fa-crosshairs"></i> Focar
+									</button>
 								</span>
 							</div>
 

@@ -42,6 +42,19 @@
 				</div>
 
 				<div class="card-body text-center py-5">
+					<div id="AvisoTarefaAtualComponente" class="d-flex align-items-center justify-content-center mb-3 gap-2" ng-show="tarefaEmFoco">
+						<span class="text-warning fw-semibold fs-5">
+							<i class="fa-solid fa-crosshairs me-1"></i> Foco atual: {{tarefaEmFoco.Nome}}
+						</span>
+
+						<button id="BotaoRemoverFocoComponente"
+								class="btn btn-sm btn-outline-danger p-0 d-flex align-items-center justify-content-center"
+								style="width: 24px; height: 24px; font-weight: bold;"
+								ng-click="removerFocoTarefa()"
+								title="Cancelar Foco">
+							X
+						</button>
+					</div>
 					<h1 id="CronometroTitulo" class="h3 mb-4">Pomodoro Timer</h1>
 
 					<div id="VisorRelogioComponente" class="position-relative d-inline-block my-4">

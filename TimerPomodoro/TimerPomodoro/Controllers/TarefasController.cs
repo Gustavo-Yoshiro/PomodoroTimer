@@ -68,9 +68,19 @@ namespace TimerPomodoro.Controllers
 			{
 				using (var db = new PomodoroContext())
 				{
-					db.Tarefas.AddOrUpdate(tarefa);
+					var existente = db.Tarefas.Find(tarefa.Id);
+					if (existente == null)
+					{
+						Response.StatusCode = 404;
+						return Json(new { sucesso = false, mensagem = "Tarefa não encontrada." });
+					}
+
+					existente.Nome = tarefa.Nome;
+					existente.Ativa = tarefa.Ativa;
+
 					db.SaveChanges();
 				}
+
 				return Json(new { sucesso = true });
 			}
 			catch (Exception ex)
@@ -79,6 +89,7 @@ namespace TimerPomodoro.Controllers
 				return Json(new { sucesso = false, mensagem = "Falha ao atualizar tarefa no banco." });
 			}
 		}
+
 
 		[HttpPost]
 		public ActionResult RemoverTarefa(Tarefa tarefa)

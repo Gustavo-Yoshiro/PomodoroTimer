@@ -5,7 +5,8 @@ app.controller("CronometroController", [
     "$scope",
     "$interval",
     "$http",
-    function ($scope, $interval, $http) {
+    "$rootScope",
+    function ($scope, $interval, $http, $rootScope) {
         const TemposPorFase = {
             'Foco': 3 * 1,
             'Pausa Curta': 5 * 1,
@@ -99,7 +100,7 @@ app.controller("CronometroController", [
 
         function salvarFase() {
             var dadosDaFase = {
-                IdTarefa: null,
+                IdTarefa: $rootScope.tarefaEmFoco ? $rootScope.tarefaEmFoco.Id : null,
                 Tipo: $scope.faseAtual, 
                 Status: "Concluida",
                 DuracaoReal: TemposPorFase[$scope.faseAtual] 
@@ -159,6 +160,11 @@ app.controller("CronometroController", [
             $scope.deslocamentoCirculo = 0;
         };
 
+
+        $scope.removerFocoTarefa = function () {
+            $rootScope.tarefaEmFoco = null;
+        };
+
         atualizarTempoExibido();
     }
 ]);
@@ -173,7 +179,8 @@ app.controller("CronometroController", [
 app.controller("TarefasController", [
     "$scope",
     "$http",
-    function ($scope, $http) {
+    "$rootScope",
+    function ($scope, $http, $rootScope) {
         $scope.tarefas = [];
 
         $scope.listarTarefas = function () {
@@ -188,13 +195,28 @@ app.controller("TarefasController", [
                 });
         };
 
-        $scope.abrirModalNovaTarefa = function () {
-            var nomeDaTarefa = prompt("Digite o nome da sua nova tarefa:");
+        $scope.abrirFormularioNovaTarefa = function () {
+            $scope.exibirFormularioNovaTarefa = true;
+            $scope.novaTarefa = { Nome: "", Ativa: true };
+        };
 
-            if (!nomeDaTarefa) return;
+        $scope.cancelarNovaTarefa = function () {
+            $scope.exibirFormularioNovaTarefa = false;
+        };
 
-            var novaTarefa = { Nome: nomeDaTarefa, Ativa: true };
-            $scope.salvarTarefa(novaTarefa);
+        $scope.confirmarNovaTarefa = function () {
+            if (!$scope.novaTarefa.Nome) return;
+
+            $scope.salvarTarefa($scope.novaTarefa);
+            $scope.exibirFormularioNovaTarefa = false;
+        };
+
+        $scope.selecionarTarefaParaFoco = function (tarefa) {
+            $rootScope.tarefaEmFoco = tarefa;
+
+            var painel = document.getElementById('JanelaTarefasComponente');
+            var instancia = bootstrap.Offcanvas.getInstance(painel);
+            if (instancia) instancia.hide();
         };
 
         $scope.salvarTarefa = function (tarefa) {
